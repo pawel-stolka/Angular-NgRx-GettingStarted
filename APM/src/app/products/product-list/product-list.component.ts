@@ -1,3 +1,4 @@
+import { getShowProductCode } from './../state/product.reducer';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 
@@ -40,12 +41,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
     });
 
     // TODO: unsubscribe
-    this.store.select('products').subscribe(
-      products => {
-        if (products) {
-          this.displayCode = products.showProductCode
-        }
-      }
+    this.store.select(getShowProductCode).subscribe(
+      showProductCode => this.displayCode = showProductCode
     )
   }
 
