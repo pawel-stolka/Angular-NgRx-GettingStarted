@@ -1,4 +1,3 @@
-import { getProducts } from './../state/product.reducer';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -10,6 +9,8 @@ import { NumberValidators } from '../../shared/number.validator';
 import { Store } from "@ngrx/store";
 import { State, getCurrentProduct } from "../state/product.reducer";
 import * as ProductActions from "../state/product.actions";
+import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'pm-product-edit',
@@ -26,6 +27,7 @@ export class ProductEditComponent implements OnInit {
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
   private genericValidator: GenericValidator;
+  product$: Observable<Product | null>;
 
   constructor(
     private fb: FormBuilder,
@@ -64,10 +66,9 @@ export class ProductEditComponent implements OnInit {
     });
 
     // Watch for changes to the currently selected product
-    // TODO: unsubscribe
-    this.store.select(getCurrentProduct).subscribe(
+    this.product$ = this.store.select(getCurrentProduct).pipe(tap(
       currentProduct => this.displayProduct(currentProduct)
-    );
+    ));
 
     // Watch for value changes for validation
     this.productForm.valueChanges.subscribe(
