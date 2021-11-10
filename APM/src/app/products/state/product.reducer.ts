@@ -1,3 +1,4 @@
+import { ProductState } from 'src/app/products/state/product.reducer';
 import { createReducer, on, createAction, createFeatureSelector, createSelector } from "@ngrx/store";
 import { Product } from "../product";
 import * as AppState from "../../state/app.state";
@@ -68,6 +69,12 @@ export const productReducer = createReducer<ProductState>(
         description: '',
         starRating: 0
       }
+    }
+  }),
+  on(ProductActions.loadProductsSuccess, (state, action): ProductState => {
+    return {
+      ...state,
+      products: action.products
     }
   })
 )
